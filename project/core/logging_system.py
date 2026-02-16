@@ -8,13 +8,13 @@ from datetime import datetime
 class SystemLogger:
     VALID_LOG_TYPES = {'debug', 'info', 'warning', 'error', 'critical'}
 
-    def __init__(self, log_type:str, data:str, *args, **kwargs):
+    def __init__(self, log_type:str, title:str, data:str, *args, **kwargs):
         self.REPORTS_DIR = path.abspath(path.join(path.dirname(__file__), '..', 'reports'))
         self.LOGS_DIR = path.join(self.REPORTS_DIR, 'logs')
         #- configurate logger system when class called -#
         self.logger = self._setup_logger()
         #- make class callable dirrectly by run _log func -#
-        self._log(log_type, data)
+        self._log(log_type, title, data)
 
 
     #--------------- logger system ---------------#
@@ -45,16 +45,16 @@ class SystemLogger:
 
 
         #- consol handler
-        console_handler = logging.StreamHandler()
-        console_handler.setLevel(logging.INFO)
-        console_handler.setFormatter(formatter)
-        logger.addHandler(console_handler)
+        # console_handler = logging.StreamHandler()
+        # console_handler.setLevel(logging.INFO)
+        # console_handler.setFormatter(formatter)
+        # logger.addHandler(console_handler)
         
         return logger
 
 
     #--------------- logger ---------------#
-    def _log(self, log_type:str, data:str): #-> log types : debug - info - warning - error critical
+    def _log(self, log_type:str, title:str, data:str): #-> log types : debug - info - warning - error critical
         log_type = log_type.lower()
 
         #- make sure the logger has correct log_type -#
@@ -72,7 +72,7 @@ class SystemLogger:
 
         else:
             log_method = getattr(self.logger, log_type)
-            log_method(data)
+            log_method(f'| {title} | ---> {data}')
 
 
 
