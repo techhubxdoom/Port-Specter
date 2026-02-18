@@ -18,7 +18,7 @@ class EncryptDecryptData:
         self.cipher = Fernet(self.ENC_KEY)
 
 
-    # -------------------------
+    # ----------- check ecryption key --------------
     def check_key(self):
         if not path.exists(self.ENV_PATH):
             open(self.ENV_PATH, "w").close()
@@ -30,12 +30,27 @@ class EncryptDecryptData:
             set_key(self.ENV_PATH, "ENC_KEY", key)
 
 
-    # -------------------------
+    # ------------ encryption def -------------
     def encrypt(self, data: str) -> bytes:
-        return self.cipher.encrypt(data.encode())
+        return self.cipher.encrypt(str(data).encode())
 
-    def decrypt(self, data: bytes) -> str:
-        return self.cipher.decrypt(data).decode()
+
+    # ------------ decryption def -------------
+    def decrypt(self, file_path: str) -> list:
+        decrypted_lines = []
+
+        with open(file_path, 'r') as file:
+            for line in file:
+                if "gAAAA" in line:
+                    token = line.strip().split()[-1]
+                    try:
+                        decrypted = self.cipher.decrypt(token.encode()).decode()
+                        decrypted_lines.append(decrypted)
+                    except Exception as e:
+                        print("Failed to decrypt line:", e)
+
+        return decrypted_lines
+
 
 
 # x = EncryptDecryptData()

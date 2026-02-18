@@ -1,6 +1,5 @@
 import psutil
 import ipaddress
-from logging_system import SystemLogger
 import ctypes
 import ctypes.wintypes as wintypes
 import os
@@ -229,6 +228,8 @@ class PortScanner:
 
 
 
-x = PortScanner('listen')
-# SystemLogger('info', 'scanning result (Listen Connections)', x.connections)
-print(x.connections)
+# x = PortScanner('listen')
+# # SystemLogger('info', 'scanning result (Listen Connections)', x.connections)
+# print(x.connections)
+
+
