@@ -10,7 +10,13 @@ class SystemLogger:
 
     def __init__(self, log_type:str, title:str, data:str, *args, **kwargs):
         self.REPORTS_DIR = path.abspath(path.join(path.dirname(__file__), '..', 'reports'))
+
         self.LOGS_DIR = path.join(self.REPORTS_DIR, 'logs')
+        if not path.exists(self.LOGS_DIR):
+            os.mkdir(self.LOGS_DIR)
+
+        self.today_logs = path.join(self.REPORTS_DIR, 'logs', str(datetime.today().date()))
+
         #- configurate logger system when class called -#
         self.logger = self._setup_logger()
         #- make class callable dirrectly by run _log func -#
@@ -20,8 +26,8 @@ class SystemLogger:
     #--------------- logger system ---------------#
     def _setup_logger(self):
         #- create the LOGS folder -#
-        if not path.exists(self.LOGS_DIR):
-            os.mkdir(self.LOGS_DIR)
+        if not path.exists(self.today_logs):
+            os.mkdir(self.today_logs)
 
 
         #- logs settings -#
@@ -32,10 +38,16 @@ class SystemLogger:
         formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
 
 
-        #- File handler
-        file_name = path.join(self.LOGS_DIR,
-                f'scan_{datetime.now().strftime("%Y-%m-%d_%H-%M-%S")}.log'
-                )
+        #- File handler name
+        exist_files = [file.split('.')[0][-1] for file in os.listdir(self.today_logs)]
+        
+        if not exist_files:
+            file_name = 1
+        else:
+            file_name = int(exist_files[-1]) + 1
+        
+        file_name = path.join(self.today_logs, f'{datetime.now().strftime("%H-%M-%S")}_{file_name}.log')
+        
         file_handler = RotatingFileHandler(
             file_name, maxBytes=5_000_000, backupCount=3
         )
@@ -76,4 +88,5 @@ class SystemLogger:
 
 
 
-# SystemLogger('debug', 'for test!')
+# SystemLogger('debug', 'test', 'for test!')                             
+
