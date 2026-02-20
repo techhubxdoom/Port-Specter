@@ -10,6 +10,8 @@ class SystemLogger:
 
     def __init__(self, log_type:str, title:str, data:str, *args, **kwargs):
         self.REPORTS_DIR = path.abspath(path.join(path.dirname(__file__), '..', 'reports'))
+        if not path.exists(self.REPORTS_DIR):
+            os.mkdir(self.REPORTS_DIR)
 
         self.LOGS_DIR = path.join(self.REPORTS_DIR, 'logs')
         if not path.exists(self.LOGS_DIR):
@@ -88,7 +90,7 @@ class SystemLogger:
 
 
 
-# SystemLogger('debug', 'test', 'for test!')                             
+# SystemLogger('debug', 'test', 'for test!')                        
 
 
 

@@ -1,0 +1,1 @@
+pyside6-uic specterUI.ui -o specterUI.py
